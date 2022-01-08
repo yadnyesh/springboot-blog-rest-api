@@ -1,5 +1,6 @@
 package io.yadnyesh.springbootblog.controller;
 
+import io.yadnyesh.springbootblog.entity.Post;
 import io.yadnyesh.springbootblog.payload.PostDto;
 import io.yadnyesh.springbootblog.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,10 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") String id) {
         return new ResponseEntity<>(postService.getPostById(Long.parseLong(id)), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = "id") String id) {
+        return new ResponseEntity<>(postService.updatePost(postDto, Long.parseLong(id)), HttpStatus.OK);
     }
 }
