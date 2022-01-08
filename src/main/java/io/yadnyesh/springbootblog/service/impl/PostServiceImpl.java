@@ -20,6 +20,10 @@ public class PostServiceImpl implements PostService {
     public PostDto createPost(PostDto postDto) {
         Post post = new Post();
         BeanUtils.copyProperties(postDto, post);
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setDescription(postDto.getDescription());
+
         Post createdPost = postRepository.save(post);
         PostDto createdPostDtoResponse = new PostDto();
         BeanUtils.copyProperties(createdPost, createdPostDtoResponse);
