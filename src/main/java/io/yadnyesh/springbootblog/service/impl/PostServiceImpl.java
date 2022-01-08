@@ -7,6 +7,8 @@ import io.yadnyesh.springbootblog.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -18,15 +20,34 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto createPost(PostDto postDto) {
+        Post post = mapToPostEntity(postDto);
+
+        Post createdPost = postRepository.save(post);
+
+        PostDto createdPostDtoResponse = mapToPostDto(createdPost);
+
+        return createdPostDtoResponse;
+    }
+
+    @Override
+    public List<PostDto> getAllPosts() {
+        return null;
+    }
+
+    private PostDto mapToPostDto(Post post) {
+        PostDto postDto = new PostDto();
+        postDto.setId(post.getId());
+        postDto.setTitle(post.getTitle());
+        postDto.setDescription(post.getDescription());
+        postDto.setContent(post.getContent());
+        return postDto;
+    }
+
+    private Post mapToPostEntity(PostDto postDto) {
         Post post = new Post();
-        BeanUtils.copyProperties(postDto, post);
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
         post.setDescription(postDto.getDescription());
-
-        Post createdPost = postRepository.save(post);
-        PostDto createdPostDtoResponse = new PostDto();
-        BeanUtils.copyProperties(createdPost, createdPostDtoResponse);
-        return createdPostDtoResponse;
+        return post;
     }
 }
