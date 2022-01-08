@@ -1,6 +1,7 @@
 package io.yadnyesh.springbootblog.service.impl;
 
 import io.yadnyesh.springbootblog.entity.Post;
+import io.yadnyesh.springbootblog.exception.ResourceNotFoundException;
 import io.yadnyesh.springbootblog.payload.PostDto;
 import io.yadnyesh.springbootblog.repository.PostRepository;
 import io.yadnyesh.springbootblog.service.PostService;
@@ -34,6 +35,14 @@ public class PostServiceImpl implements PostService {
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(post -> mapToPostDto(post)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto getPostById(Long postId) {
+        Post post = postRepository
+                     .findById(postId)
+                     .orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
+        return mapToPostDto(post);
     }
 
     private PostDto mapToPostDto(Post post) {
