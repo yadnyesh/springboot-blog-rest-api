@@ -3,8 +3,9 @@ package io.yadnyesh.springbootblog.payload;
 import lombok.*;
 
 
-@NoArgsConstructor
+
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
