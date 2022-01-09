@@ -4,8 +4,10 @@ import io.yadnyesh.springbootblog.config.repository.RoleRepository;
 import io.yadnyesh.springbootblog.config.repository.UserRepository;
 import io.yadnyesh.springbootblog.entity.Role;
 import io.yadnyesh.springbootblog.entity.User;
+import io.yadnyesh.springbootblog.payload.JWTAuthResponse;
 import io.yadnyesh.springbootblog.payload.LoginDto;
 import io.yadnyesh.springbootblog.payload.SignUpDto;
+import io.yadnyesh.springbootblog.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +36,25 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User Signedin successfully", HttpStatus.OK);
+
+        String token = tokenProvider.generateJwtToken(authentication);
+        return ResponseEntity.ok(new JWTAuthResponse(token));
     }
+
+//    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto) {
+//        Authentication authentication = authenticationManager
+//                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        return new ResponseEntity<>("User Signedin successfully", HttpStatus.OK);
+//    }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registeredUser(@RequestBody SignUpDto signUpDto) {
