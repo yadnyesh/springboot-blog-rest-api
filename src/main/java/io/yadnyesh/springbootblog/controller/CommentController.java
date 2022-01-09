@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/api/")
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
@@ -27,5 +27,10 @@ public class CommentController {
     @GetMapping("/posts/{postId}/comments")
     public List<CommentDto> getCommentsByPostId(@PathVariable(name = "postId") Long postId) {
         return commentService.getCommentsByPostId(postId);
+    }
+
+    @GetMapping("/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<CommentDto> getCommentByPostIdAndCommentId(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
+        return new ResponseEntity<>(commentService.getCommentById(postId, commentId), HttpStatus.OK);
     }
 }
