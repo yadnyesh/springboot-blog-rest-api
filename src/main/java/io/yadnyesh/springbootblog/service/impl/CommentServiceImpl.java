@@ -72,6 +72,13 @@ public class CommentServiceImpl implements CommentService {
         return mapToCommentDto(updatedComment);
     }
 
+    @Override
+    public void deleteComment(Long postId, Long commentId) {
+        CommentDto existingCommentDto = getCommentById(postId, commentId);
+        Comment existingComment = mapToCommentEntity(existingCommentDto);
+        commentRepository.delete(existingComment);
+    }
+
     private CommentDto mapToCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
