@@ -3,6 +3,7 @@ package io.yadnyesh.springbootblog.security;
 import io.yadnyesh.springbootblog.config.repository.UserRepository;
 import io.yadnyesh.springbootblog.entity.Role;
 import io.yadnyesh.springbootblog.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    @Autowired
     private final UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {
@@ -26,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         User user = userRepository
-                .findByUsernmeOrEmail(usernameOrEmail, usernameOrEmail)
+                .findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + usernameOrEmail));
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
                                                                       user.getPassword(),
