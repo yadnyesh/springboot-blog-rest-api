@@ -1,4 +1,4 @@
-package io.yadnyesh.springbootblog.repository;
+package io.yadnyesh.springbootblog.config.repository;
 
 import io.yadnyesh.springbootblog.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
